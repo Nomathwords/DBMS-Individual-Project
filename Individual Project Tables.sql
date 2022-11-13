@@ -1,6 +1,9 @@
 DROP TABLE IF EXISTS Product1
 DROP TABLE IF EXISTS Product2
 DROP TABLE IF EXISTS Product3
+DROP TABLE IF EXISTS Product
+
+/*DROP TABLE IF EXISTS Technical_Staff_Degree
 DROP TABLE IF EXISTS Repair_Complaint
 DROP TABLE IF EXISTS Technical_Staff
 DROP TABLE IF EXISTS Worker
@@ -11,74 +14,82 @@ DROP TABLE IF EXISTS Accident
 DROP TABLE IF EXISTS Product1_Account
 DROP TABLE IF EXISTS Product2_Account
 DROP TABLE IF EXISTS Product3_Account
+DROP TABLE IF EXISTS Employee
 
-CREATE TABLE Technical_Staff (
-   Name varchar(20) PRIMARY KEY,
+
+CREATE TABLE Employee (
+   Employee_Name varchar(20) PRIMARY KEY,
    Address varchar(50),
    Salary INT,
-   Degree varchar(5)
+   Employee_Type varchar(20)
+);
+
+CREATE TABLE Technical_Staff (
+   Technical_Staff_Name varchar(20) PRIMARY KEY,
+   Position varchar(20),
+
+   FOREIGN KEY (Technical_Staff_Name) REFERENCES Employee(Employee_Name)
 );
 
 CREATE TABLE Worker (
-   Name varchar(20) PRIMARY KEY,
-   Address varchar(50),
-   Salary INT,
-   Max_Products INT
+   Worker_Name varchar(20) PRIMARY KEY,
+   Max_Products INT,
+
+   FOREIGN KEY (Worker_Name) REFERENCES Employee(Employee_Name)
 );
 
 CREATE TABLE Quality_Controller (
-   Name varchar(20) PRIMARY KEY,
-   Address varchar(50),
-   Salary INT,
-   Product_Type varchar(20)
+   Quality_Controller_Name varchar(20) PRIMARY KEY,
+   Product_Type varchar(20),
+
+   FOREIGN KEY (Quality_Controller_Name) REFERENCES Employee(Employee_Name)
+);
+
+CREATE TABLE Technical_Staff_Degree (
+   Name varchar(20),
+   Degree varchar(5),
+
+   PRIMARY KEY (Name, Degree),
+   FOREIGN KEY (Name) REFERENCES Technical_Staff(Technical_Staff_Name)
+) */
+
+CREATE TABLE Product (
+   ID INT PRIMARY KEY,
+   Date_Created Date,
+   Days_Developed varchar(15),
+   Produced_By varchar(20),
+   Tested_By varchar(20),
+   Repaired_By varchar(20),
+   Size varchar(20),
+   Product_Type INT,
+
+   FOREIGN KEY (Produced_By) REFERENCES Worker(Worker_Name),
+   FOREIGN KEY (Tested_By) REFERENCES Quality_Controller(Quality_Controller_Name),
+   FOREIGN KEY (Repaired_By) REFERENCES Technical_Staff(Technical_Staff_Name)
 );
 
 CREATE TABLE Product1 (
-   ID INT PRIMARY KEY,
-   Date varchar(10),
-   Time varchar(15),
-   Produced_By varchar(20),
-   Tested_By varchar(20),
-   Repaired_By varchar(20),
-   Size varchar(10),
+   Product1_ID INT PRIMARY KEY,
    Software varchar(30),
 
-   FOREIGN KEY (Produced_By) REFERENCES Worker(Name),
-   FOREIGN KEY (Tested_By) REFERENCES Quality_Controller(Name),
-   FOREIGN KEY (Repaired_By) REFERENCES Technical_Staff(Name)
+   FOREIGN KEY (Product1_ID) REFERENCES Product(ID)
 );
 
 CREATE TABLE Product2 (
-   ID INT PRIMARY KEY,
-   Date varchar(10),
-   Time varchar(15),
-   Produced_By varchar(20),
-   Tested_By varchar(20),
-   Repaired_By varchar(20),
-   Size varchar(10),
+   Product2_ID INT PRIMARY KEY,
    Color varchar(10),
 
-   FOREIGN KEY (Produced_By) REFERENCES Worker(Name),
-   FOREIGN KEY (Tested_By) REFERENCES Quality_Controller(Name),
-   FOREIGN KEY (Repaired_By) REFERENCES Technical_Staff(Name)
+   FOREIGN KEY (Product2_ID) REFERENCES Product(ID)
 );
 
 CREATE TABLE Product3 (
-   ID INT PRIMARY KEY,
-   Date varchar(10),
-   Time varchar(15),
-   Produced_By varchar(20),
-   Tested_By varchar(20),
-   Repaired_By varchar(20),
-   Size varchar(10),
+   Product3_ID INT PRIMARY KEY,
    Weight varchar(10),
 
-   FOREIGN KEY (Produced_By) REFERENCES Worker(Name),
-   FOREIGN KEY (Tested_By) REFERENCES Quality_Controller(Name),
-   FOREIGN KEY (Repaired_By) REFERENCES Technical_Staff(Name)
+   FOREIGN KEY (Product3_ID) REFERENCES Product(ID)
 );
 
-CREATE TABLE Customer (
+/* CoCREATE TABLE Customer (
    Name varchar(20) PRIMARY KEY,
    Address varchar(50)
 );
@@ -119,5 +130,5 @@ CREATE TABLE Repair_Complaint (
    Technical_Staff_Name varchar(20),
    Date_Repaired varchar(10),
 
-   FOREIGN KEY (Technical_Staff_Name) REFERENCES Technical_Staff(Name),
-);
+   FOREIGN KEY (Technical_Staff_Name) REFERENCES Technical_Staff(Technical_Staff_Name),
+); */
