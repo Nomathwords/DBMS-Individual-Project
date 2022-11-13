@@ -1,9 +1,8 @@
-DROP TABLE IF EXISTS Product1
+/*DROP TABLE IF EXISTS Product1
 DROP TABLE IF EXISTS Product2
 DROP TABLE IF EXISTS Product3
 DROP TABLE IF EXISTS Product
-
-/*DROP TABLE IF EXISTS Technical_Staff_Degree
+DROP TABLE IF EXISTS Technical_Staff_Degree
 DROP TABLE IF EXISTS Repair_Complaint
 DROP TABLE IF EXISTS Technical_Staff
 DROP TABLE IF EXISTS Worker
@@ -15,9 +14,17 @@ DROP TABLE IF EXISTS Product1_Account
 DROP TABLE IF EXISTS Product2_Account
 DROP TABLE IF EXISTS Product3_Account
 DROP TABLE IF EXISTS Employee
+DROP TABLE IF EXISTS Purchase */
+
+DROP TABLE IF EXISTS Customer
+DROP TABLE IF EXISTS Product3
+DROP TABLE IF EXISTS Product2
+DROP TABLE IF EXISTS Product1
+DROP TABLE IF EXISTS Product
+DROP TABLE IF EXISTS Purchase
 
 
-CREATE TABLE Employee (
+/*CREATE TABLE Employee (
    Employee_Name varchar(20) PRIMARY KEY,
    Address varchar(50),
    Salary INT,
@@ -51,12 +58,12 @@ CREATE TABLE Technical_Staff_Degree (
 
    PRIMARY KEY (Name, Degree),
    FOREIGN KEY (Name) REFERENCES Technical_Staff(Technical_Staff_Name)
-) */
+)
 
 CREATE TABLE Product (
    ID INT PRIMARY KEY,
    Date_Created Date,
-   Days_Developed varchar(15),
+   Days_Developed INT,
    Produced_By varchar(20),
    Tested_By varchar(20),
    Repaired_By varchar(20),
@@ -89,7 +96,7 @@ CREATE TABLE Product3 (
    FOREIGN KEY (Product3_ID) REFERENCES Product(ID)
 );
 
-/* CoCREATE TABLE Customer (
+ CREATE TABLE Customer (
    Name varchar(20) PRIMARY KEY,
    Address varchar(50)
 );
@@ -101,7 +108,15 @@ CREATE TABLE Complaint (
    Treatment varchar(20)
 );
 
-CREATE TABLE Accident (
+CREATE TABLE Purchase (
+   Customer_Name varchar(20),
+   Product_ID INT PRIMARY KEY,
+
+   FOREIGN KEY (Customer_Name) REFERENCES Customer(Name),
+   FOREIGN KEY (Product_ID) REFERENCES Product(ID)
+);
+
+ CREATE TABLE Accident (
    Accident_Number varchar(6),
    Date varchar(10),
    Work_Days_Lost varchar(3)
@@ -132,3 +147,8 @@ CREATE TABLE Repair_Complaint (
 
    FOREIGN KEY (Technical_Staff_Name) REFERENCES Technical_Staff(Technical_Staff_Name),
 ); */
+
+/*INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
+VALUES(1, '11/13/2022', 3, 'Jackson', 'Ansley', NULL, 'Large', 1)*/
+
+SELECT * FROM Product
