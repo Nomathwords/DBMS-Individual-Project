@@ -28,10 +28,13 @@ public class Individual_Project {
     static final int PRODUCT3 = 3;
     
     // User input prompt
-    final static String PROMPT = "\nPlease select one of the options below:\n" + "1) Insert a new employee \n" + "2) Insert a new product\n" + "3) Insert a customer that has purchased one or more products\n" + "18) Exit!";
+    
+    final static String PROMPT = "Welcome to Hunter's Warehouse!\n" + "Please select one of the options below:\n" + "1) Insert a new employee \n" + "2) Insert a new product\n" +
+    "3) Insert a customer that has purchased one or more products\n" + "4) Insert a new account associated with a product\n" + 
+    "5) Enter a complaint associated with a customer and product\n" + "6: Log an accident between an employee and product\n"
+    + "7: Retrieve the date produced and time spent to produce a particular product\n"+ "18) Exit!";
 
     public static void main(String[] args) throws SQLException {
-        System.out.println("Welcome to the Faculty application!");
         final Scanner sc = new Scanner(System.in); // Scanner is used to collect the user input
         String option = ""; // Initialize user option selection as nothing
         
@@ -49,7 +52,7 @@ public class Individual_Project {
                 		// Insert a new Technical Staff and their degrees
                 		case "1":
                 			String name;
-	            			String address;
+	            			String Address;
 	            			int salary;
 	            			String position;
 	            			String degree;
@@ -58,7 +61,7 @@ public class Individual_Project {
 	            			name  = sc.nextLine();
 	            			
 	            			System.out.println("Insert Technician address:");
-	            			address = sc.nextLine();
+	            			Address = sc.nextLine();
 	            			
 	            			System.out.println("Insert Technician salary:");
 	            			salary = sc.nextInt();
@@ -72,7 +75,7 @@ public class Individual_Project {
 	                        // Get the database connection, create statement and execute it right away, as no user input need be collected
 	                        try (final Connection connection = DriverManager.getConnection(URL)) {
 	                                final Statement statement = connection.createStatement();
-	                                statement.execute("INSERT INTO Employee(Employee_Name, Address, Salary, Employee_Type) VALUES('" + name + "', '" + address + "', " + salary + ", '" + TECHNICAL_STAFF + "')");
+	                                statement.execute("INSERT INTO Employee(Employee_Name, Address, Salary, Employee_Type) VALUES('" + name + "', '" + Address + "', " + salary + ", '" + TECHNICAL_STAFF + "')");
 	                                System.out.println("Execution complete!");
 	                        }
 	                        
@@ -113,7 +116,7 @@ public class Individual_Project {
 	            			name  = sc.nextLine();
 	            			
 	            			System.out.println("Insert Worker address:");
-	            			address = sc.nextLine();
+	            			Address = sc.nextLine();
 	            			
 	            			System.out.println("Insert Worker salary:");
 	            			salary = sc.nextInt();
@@ -127,7 +130,7 @@ public class Individual_Project {
 	                        // Get the database connection, create statement and execute it right away, as no user input need be collected
 	                        try (final Connection connection = DriverManager.getConnection(URL)) {
 	                                final Statement statement = connection.createStatement();
-	                                statement.execute("INSERT INTO Employee(Employee_Name, Address, Salary, Employee_Type) VALUES('" + name + "', '" + address + "', " + salary + ", '" + WORKER + "')");
+	                                statement.execute("INSERT INTO Employee(Employee_Name, Address, Salary, Employee_Type) VALUES('" + name + "', '" + Address + "', " + salary + ", '" + WORKER + "')");
 	                                System.out.println("Execution complete!");
 	                        }
 	                        
@@ -151,7 +154,7 @@ public class Individual_Project {
 	            			name  = sc.nextLine();
 	            			
 	            			System.out.println("Insert Quality Controller address:");
-	            			address = sc.nextLine();
+	            			Address = sc.nextLine();
 	            			
 	            			System.out.println("Insert Quality Controller salary:");
 	            			salary = sc.nextInt();
@@ -165,7 +168,7 @@ public class Individual_Project {
 	                        // Get the database connection, create statement and execute it right away, as no user input need be collected
 	                        try (final Connection connection = DriverManager.getConnection(URL)) {
 	                                final Statement statement = connection.createStatement();
-	                                statement.execute("INSERT INTO Employee(Employee_Name, Address, Salary, Employee_Type) VALUES('" + name + "', '" + address + "', " + salary + ", '" + QUALITY_CONTROLLER + "')");
+	                                statement.execute("INSERT INTO Employee(Employee_Name, Address, Salary, Employee_Type) VALUES('" + name + "', '" + Address + "', " + salary + ", '" + QUALITY_CONTROLLER + "')");
 	                                System.out.println("Execution complete!");
 	                        }
 	                        
@@ -359,39 +362,41 @@ public class Individual_Project {
                                 statement.execute("INSERT INTO Product3(Product3_ID, Weight) VALUES(" + ID + ", '" + Weight + "')");
                                 System.out.println("Execution complete!");
 	                        }
+	                        
                 			break;
                 			
                 		default: 
                 			System.out.println("Unrecognized option: " + option + "\nPlease try again!");
                 			break;
                 	}
+                	
                 	break;
                 	
                 case "3":
-                	String answer;
-                	String name;
-                	String address;
+                	String Answer;
+                	String Customer_Name;
+                	String Address;
                 	int numProducts;
                 	int Product_ID;
                 	
                 	System.out.println("Is this a new customer? (Yes / No)");
-                	answer = sc.nextLine();
+                	Answer = sc.nextLine();
                 	
-                	if(answer.equals("Yes") || answer.equals("yes")) {
+                	if(Answer.equals("Yes") || Answer.equals("yes")) {
 	                	System.out.println("Insert customer name:");
-	                	name = sc.nextLine();
+	                	Customer_Name = sc.nextLine();
 	                	
 	                	System.out.println("Insert customer address:");
-	                	address = sc.nextLine();
+	                	Address = sc.nextLine();
 	                	
-	                	System.out.println("How many products has " + name + " bought?");
+	                	System.out.println("How many products has " + Customer_Name + " bought?");
 	                	numProducts = sc.nextInt();
 	                	sc.nextLine();
 	                	
 	                	System.out.println("Inserting into Customer table. . .");
 	                    try (final Connection connection = DriverManager.getConnection(URL)) {
 	                        final Statement statement = connection.createStatement();
-	                        statement.execute("INSERT INTO Customer(Name, Address) VALUES('" + name + "', '" + address + "')");
+	                        statement.execute("INSERT INTO Customer(Name, Address) VALUES('" + Customer_Name + "', '" + Address + "')");
 	                        System.out.println("Execution complete!");
 	                    }
 	                	
@@ -403,7 +408,7 @@ public class Individual_Project {
 	                		System.out.println("Inserting into Purchase table. . .");
 	                        try (final Connection connection = DriverManager.getConnection(URL)) {
 	                            final Statement statement = connection.createStatement();
-	                            statement.execute("INSERT INTO Purchase(Customer_Name, Product_ID) VALUES('" + name + "', '" + Product_ID + "')");
+	                            statement.execute("INSERT INTO Purchase(Customer_Name, Product_ID) VALUES('" + Customer_Name + "', '" + Product_ID + "')");
 	                            System.out.println("Execution complete!");
 	                        }
 	                	}
@@ -411,9 +416,9 @@ public class Individual_Project {
                 	
                 	else {
                 		System.out.println("Insert customer name:");
-	                	name = sc.nextLine();
+                		Customer_Name = sc.nextLine();
 	                	
-	                	System.out.println("How many products has " + name + " bought?");
+	                	System.out.println("How many products has " + Customer_Name + " bought?");
 	                	numProducts = sc.nextInt();
 	                	sc.nextLine();
 	                	
@@ -425,168 +430,136 @@ public class Individual_Project {
 	                		System.out.println("Inserting into Purchase table. . .");
 	                        try (final Connection connection = DriverManager.getConnection(URL)) {
 	                            final Statement statement = connection.createStatement();
-	                            statement.execute("INSERT INTO Purchase(Customer_Name, Product_ID) VALUES('" + name + "', '" + Product_ID + "')");
+	                            statement.execute("INSERT INTO Purchase(Customer_Name, Product_ID) VALUES('" + Customer_Name + "', '" + Product_ID + "')");
 	                            System.out.println("Execution complete!");
 	                        }
-	                	}
-	                	
+	                	}	
                 	}
                 	
                 	break;
                 	
                 case"4":
+                	int Account_Number;
+                	String Date_Created;
+                	double Product_Cost;
+
+                	System.out.println("Insert account number:");
+                	Account_Number = sc.nextInt();
+                	sc.nextLine();
                 	
+                	System.out.println("Insert account creation date");
+                	Date_Created = sc.nextLine();
                 	
+                	System.out.println("Insert product cost:");
+                	Product_Cost = sc.nextDouble();
+                	sc.nextLine();
                 	
+                	System.out.println("Insert product ID");
+                	Product_ID = sc.nextInt();
+                	sc.nextLine();
+
+                	try(final Connection connection = DriverManager.getConnection(URL)) {
+                		CallableStatement myStmt = connection.prepareCall("{call sp_enterAccount(?, ?, ?, ?)}");
+                		
+                		// Insert the Product ID, Date Created, Days Developed, who created it, who tested it, who repaired it (if applicable), the size, and what type of product it is
+                		myStmt.setInt(1, Account_Number);
+                		myStmt.setString(2, Date_Created);
+                		myStmt.setDouble(3, Product_Cost);
+                		myStmt.setInt(4, Product_ID);
+                		myStmt.execute();
+                		System.out.println("Statement executed!");
+                	}
+
+                	break;
+                	
+                case"5":
+                	int Complaint_ID;
+                	String Description;
+                	String Treatment;
+
+                	
+                	System.out.println("Insert Complaint ID:");
+                	Complaint_ID = sc.nextInt();
+                	sc.nextLine();
+                	
+                	System.out.println("Insert date the complaint was created:");
+                	Date_Created = sc.nextLine();
+                	
+                	System.out.println("Insert desrcription of the complaint (250 chars or less):");
+                	Description = sc.nextLine();
+                	
+                	System.out.println("Insert treatment of complaint:");
+                	Treatment = sc.nextLine();
+                	
+                	System.out.println("Insert customer name:");
+                	Customer_Name = sc.nextLine();
+                	
+                	System.out.println("Insert product ID:");
+                	Product_ID = sc.nextInt();
+                	sc.nextLine();
+                	
+                	System.out.println("Inserting into Purchase table. . .");
+                    try (final Connection connection = DriverManager.getConnection(URL)) {
+                        final Statement statement = connection.createStatement();
+                        statement.execute("INSERT INTO Complaint(Complaint_ID, Date, Description, Treatment, Customer_Name, Product_ID) VALUES(" + Complaint_ID + ", '" + Date_Created + "', '" + Description + "', '" + Treatment + "', '" + Customer_Name + "', " + Product_ID + " )");
+                        System.out.println("Execution complete!");
+                    }
                 	
                 	break;
                 	
+                case "6":
+                	int Accident_Number;
+                	int Work_Days_Lost;
+                	String Employee_Name;
                 	
+                	System.out.println("Insert accident number");
+                	Accident_Number = sc.nextInt();
+                	sc.nextLine();
                 	
+                	System.out.println("Insert date of accident:");
+                	Date_Created = sc.nextLine();
                 	
+                	System.out.println("Insert number of work days lost:");
+                	Work_Days_Lost = sc.nextInt();
+                	sc.nextLine();
                 	
+                	System.out.println("Insert product ID:");
+                	Product_ID = sc.nextInt();
+                	sc.nextLine();
                 	
+                	System.out.println("Insert the Technical Staff or Quality Controller that had the accident:");
+                	Employee_Name = sc.nextLine();
                 	
-                	
-                	
-                	
-                	
-                	
-                	
-                	
-                	
-                	
-                	
-                	
-                	
-                	
-                	
-                	
-                	
-                	
-                	
-                // Output a bunch of tables
-                case "20":
+                	try(final Connection connection = DriverManager.getConnection(URL)) {
+                		CallableStatement myStmt = connection.prepareCall("{call sp_enterAccident(?, ?, ?, ?, ?)}");
+                		
+                		// Insert the Product ID, Date Created, Days Developed, who created it, who tested it, who repaired it (if applicable), the size, and what type of product it is
+                		myStmt.setInt(1, Accident_Number);
+                		myStmt.setString(2, Date_Created);
+                		myStmt.setInt(3, Work_Days_Lost);
+                		myStmt.setInt(4, Product_ID);
+                		myStmt.setString(5, Employee_Name);
+                		myStmt.execute();
+                		System.out.println("Statement executed!");
+                	}
 
-                    try (final Connection connection = DriverManager.getConnection(URL)) {
-                        try (
-                            final Statement statement = connection.createStatement();
-                            final ResultSet resultSet = statement.executeQuery("SELECT * FROM Employee")) {
-                                System.out.println("Contents of the Employee table:");
-                                System.out.println("Name | Address | Salary | Employee Type ");
-                                // Unpack the tuples returned by the database and print them out to the user
-                                while (resultSet.next()) {
-                                    System.out.println(String.format("%s | %s | %s | %s ",
-                                    resultSet.getString(1),
-                                    resultSet.getString(2),
-                                    resultSet.getString(3),
-                                    resultSet.getString(4)));
-                                }
-                        }
-                    }
-                    
-                    System.out.println();
-                    
+                	break;
+                	
+                case "7":
+                	
+                	System.out.println("Insert product ID");
+                	Product_ID = sc.nextInt();
+                	sc.nextLine();
+                	
+                	System.out.println("Connecting to the database...");
                     // Get the database connection, create statement and execute it right away, as no user input need be collected
                     try (final Connection connection = DriverManager.getConnection(URL)) {
+                        System.out.println("Dispatching the query...\n");
                         try (
                             final Statement statement = connection.createStatement();
-                            final ResultSet resultSet = statement.executeQuery("SELECT * FROM Technical_Staff")) {
-                                System.out.println("Contents of the Technical Staff table:");
-                                System.out.println("Name | Position ");
-                                // Unpack the tuples returned by the database and print them out to the user
-                                while (resultSet.next()) {
-                                    System.out.println(String.format("%s | %s ",
-                                    resultSet.getString(1),
-                                    resultSet.getString(2)));
-                                }
-                        }
-                    }
-                    
-                    System.out.println();
-                    
-                    try (final Connection connection = DriverManager.getConnection(URL)) {
-                        try (
-                            final Statement statement = connection.createStatement();
-                            final ResultSet resultSet = statement.executeQuery("SELECT * FROM Technical_Staff_Degree")) {
-                                System.out.println("Contents of the Technical Staff Degree table:");
-                                System.out.println("Name | Degree");
-                                // Unpack the tuples returned by the database and print them out to the user
-                                while (resultSet.next()) {
-                                    System.out.println(String.format("%s | %s",
-                                    resultSet.getString(1),
-                                    resultSet.getString(2)));
-                                }
-                        }
-                    }
-                    
-                    System.out.println();
-
-                    try (final Connection connection = DriverManager.getConnection(URL)) {
-                        try (
-                            final Statement statement = connection.createStatement();
-                            final ResultSet resultSet = statement.executeQuery("SELECT * FROM Worker")) {
-                                System.out.println("Contents of the Worker table:");
-                                System.out.println("Name | Max Products");
-                                // Unpack the tuples returned by the database and print them out to the user
-                                while (resultSet.next()) {
-                                    System.out.println(String.format("%s | %s ",
-                                    resultSet.getString(1),
-                                    resultSet.getString(2)));
-                                }
-                        }
-                    }
-                    
-                    System.out.println();
-                    
-                    try (final Connection connection = DriverManager.getConnection(URL)) {
-                        try (
-                            final Statement statement = connection.createStatement();
-                            final ResultSet resultSet = statement.executeQuery("SELECT * FROM Quality_Controller")) {
-                                System.out.println("Contents of the Quality Controller table:");
-                                System.out.println("Name | Product Type");
-                                // Unpack the tuples returned by the database and print them out to the user
-                                while (resultSet.next()) {
-                                    System.out.println(String.format("%s | %s ",
-                                    resultSet.getString(1),
-                                    resultSet.getString(2)));
-                                }
-                        }
-                    }
-                    
-                	break;
-                	
-                case "21" :
-                	
-                	try (final Connection connection = DriverManager.getConnection(URL)) {
-                        try (
-                            final Statement statement = connection.createStatement();
-                            final ResultSet resultSet = statement.executeQuery("SELECT * FROM Product")) {
+                            final ResultSet resultSet = statement.executeQuery("SELECT Date_Created, Days_Developed FROM Product WHERE ID = '" + Product_ID + "'")) {
                                 System.out.println("Contents of the Product table:");
-                                System.out.println("ID | Date | Days Developed | Produced By | Tested By | Repaired By | Size | Product Type");
-                                // Unpack the tuples returned by the database and print them out to the user
-                                while (resultSet.next()) {
-                                    System.out.println(String.format("%s | %s | %s | %s | %s | %s | %s | %s ",
-                                    resultSet.getString(1),
-                                    resultSet.getString(2),
-                                    resultSet.getString(3),
-                                    resultSet.getString(4),
-                                    resultSet.getString(5),
-                                    resultSet.getString(6),
-                                    resultSet.getString(7),
-                                    resultSet.getString(8)));
-                                }
-                        }
-                    }
-                	
-                	System.out.println();
-                	
-                	try (final Connection connection = DriverManager.getConnection(URL)) {
-                        try (
-                            final Statement statement = connection.createStatement();
-                            final ResultSet resultSet = statement.executeQuery("SELECT * FROM Product3")) {
-                                System.out.println("Contents of the Product3 table:");
-                                System.out.println("ID | Weight");
+                                System.out.println("Date Created | Days Developed ");
                                 // Unpack the tuples returned by the database and print them out to the user
                                 while (resultSet.next()) {
                                     System.out.println(String.format("%s | %s ",
@@ -595,45 +568,32 @@ public class Individual_Project {
                                 }
                         }
                     }
-                	
-                	break;
-                	
-                case "22":
-                	
-                	try (final Connection connection = DriverManager.getConnection(URL)) {
-                        try (
-                            final Statement statement = connection.createStatement();
-                            final ResultSet resultSet = statement.executeQuery("SELECT * FROM Customer")) {
-                                System.out.println("Contents of the Customer table:");
-                                System.out.println("Name | Address");
-                                // Unpack the tuples returned by the database and print them out to the user
-                                while (resultSet.next()) {
-                                    System.out.println(String.format("%s | %s ",
-                                    resultSet.getString(1),
-                                    resultSet.getString(2)));
-                                }
-                        }
-                    }
-                	
-                	System.out.println();
-                	
-                	try (final Connection connection = DriverManager.getConnection(URL)) {
-                        try (
-                            final Statement statement = connection.createStatement();
-                            final ResultSet resultSet = statement.executeQuery("SELECT * FROM Purchase")) {
-                                System.out.println("Contents of the Purchase:");
-                                System.out.println("Customer Name | Product ID");
-                                // Unpack the tuples returned by the database and print them out to the user
-                                while (resultSet.next()) {
-                                    System.out.println(String.format("%s | %s ",
-                                    resultSet.getString(1),
-                                    resultSet.getString(2)));
-                                }
-                        }
-                    }
-                	
-                	break;
                     
+                	break;
+                	
+                case "8":
+                	System.out.println("Insert worker name:");
+                	Employee_Name = sc.nextLine();
+                	
+                	System.out.println("Connecting to the database...");
+                    // Get the database connection, create statement and execute it right away, as no user input need be collected
+                    try (final Connection connection = DriverManager.getConnection(URL)) {
+                        System.out.println("Dispatching the query...\n");
+                        try (
+                            final Statement statement = connection.createStatement();
+                            final ResultSet resultSet = statement.executeQuery("SELECT ID FROM Product WHERE Produced_By = '" + Employee_Name + "'")) {
+                                System.out.println("Contents of the Product table:");
+                                System.out.println("| Product ID |");
+                                // Unpack the tuples returned by the database and print them out to the user
+                                while (resultSet.next()) {
+                                    System.out.println(String.format("| %s |",
+                                    resultSet.getString(1)));
+                                }
+                        }
+                    }
+                    
+                	break;
+                	
                 case "18": // Do nothing, the while loop will terminate upon the next iteration
                     System.out.println("Exiting! Goodbye!");
                     break;
