@@ -1,4 +1,4 @@
-/*DROP TABLE IF EXISTS Product1
+DROP TABLE IF EXISTS Product1
 DROP TABLE IF EXISTS Product2
 DROP TABLE IF EXISTS Product3
 DROP TABLE IF EXISTS Technical_Staff_Degree
@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS Quality_Controller
 DROP TABLE IF EXISTS Employee
 DROP TABLE IF EXISTS Customer
 DROP TABLE IF EXISTS Account
-
+DROP TABLE IF EXISTS Repair_Request
 
 CREATE TABLE Employee (
    Employee_Name varchar(20) PRIMARY KEY,
@@ -24,37 +24,28 @@ CREATE TABLE Employee (
    Salary REAL,
    Employee_Type varchar(20)
 );
-
 CREATE TABLE Technical_Staff (
    Technical_Staff_Name varchar(20) PRIMARY KEY,
    Position varchar(20),
-
    FOREIGN KEY (Technical_Staff_Name) REFERENCES Employee(Employee_Name)
 );
-
 CREATE TABLE Technical_Staff_Degree (
    Name varchar(20),
    Degree varchar(5),
-
    CONSTRAINT chk_Degree_Type CHECK(Degree = 'BS' OR Degree = 'MS' OR Degree = 'PHD'),
    PRIMARY KEY (Name, Degree),
    FOREIGN KEY (Name) REFERENCES Technical_Staff(Technical_Staff_Name)
 )
-
 CREATE TABLE Worker (
    Worker_Name varchar(20) PRIMARY KEY,
    Max_Products INT,
-
    FOREIGN KEY (Worker_Name) REFERENCES Employee(Employee_Name)
 );
-
 CREATE TABLE Quality_Controller (
    Quality_Controller_Name varchar(20) PRIMARY KEY,
    Product_Type varchar(20),
-
    FOREIGN KEY (Quality_Controller_Name) REFERENCES Employee(Employee_Name)
 );
-
 CREATE TABLE Product (
    ID INT PRIMARY KEY,
    Date_Created Date,
@@ -64,38 +55,29 @@ CREATE TABLE Product (
    Repaired_By varchar(20),
    Size varchar(20),
    Product_Type INT,
-
    FOREIGN KEY (Produced_By) REFERENCES Worker(Worker_Name),
    FOREIGN KEY (Tested_By) REFERENCES Quality_Controller(Quality_Controller_Name),
    FOREIGN KEY (Repaired_By) REFERENCES Technical_Staff(Technical_Staff_Name)
 );
-
 CREATE TABLE Product1 (
    Product1_ID INT PRIMARY KEY,
    Software varchar(30),
-
    FOREIGN KEY (Product1_ID) REFERENCES Product(ID)
 );
-
 CREATE TABLE Product2 (
    Product2_ID INT PRIMARY KEY,
    Color varchar(10),
-
    FOREIGN KEY (Product2_ID) REFERENCES Product(ID)
 );
-
 CREATE TABLE Product3 (
    Product3_ID INT PRIMARY KEY,
    Weight varchar(10),
-
    FOREIGN KEY (Product3_ID) REFERENCES Product(ID)
 );
-
  CREATE TABLE Customer (
    Name varchar(20) PRIMARY KEY,
    Address varchar(50)
 );
-
 CREATE TABLE Complaint (
    Complaint_ID INT PRIMARY KEY,
    Date_Created DATE,
@@ -103,21 +85,17 @@ CREATE TABLE Complaint (
    Treatment varchar(20),
    Customer_Name varchar(20),
    Product_ID INT,
-
    FOREIGN KEY (Customer_Name) REFERENCES Customer(Name),
    FOREIGN KEY (Product_ID) REFERENCES Product(ID)
 );
-
 CREATE TABLE Purchase (
    Customer_Name varchar(20),
    Product_ID INT,
-
    PRIMARY KEY (Customer_Name, Product_ID),
    FOREIGN KEY (Customer_Name) REFERENCES Customer(Name),
    FOREIGN KEY (Product_ID) REFERENCES Product(ID)
 );
 
--- Only insert Technicians or Workers
  CREATE TABLE Accident (
    Accident_Number INT,
    Date_Created DATE,
@@ -125,52 +103,53 @@ CREATE TABLE Purchase (
    Product_ID INT,
    Employee_Name varchar(20),
    Employee_Type varChar(20),
-
-   CONSTRAINT chk_Employee_Type CHECK(Employee_Type != 'Worker'),
+   CONSTRAINT chk_Employee_Type CHECK(Employee_Type != 'Quality Controller'),
    FOREIGN KEY (Product_ID) REFERENCES PRODUCT(ID),
    FOREIGN KEY (Employee_Name) REFERENCES Employee(Employee_Name)
 );
-
 CREATE TABLE Account (
    Account_Number INT PRIMARY KEY,
    Date_Created DATE
 );
-
 CREATE TABLE Product1_Account (
    Account_Number INT PRIMARY KEY,
    Product_Cost REAL,
    Product_ID INT,
-
    FOREIGN KEY (Account_Number) REFERENCES Account(Account_Number),
    FOREIGN KEY (Product_ID) REFERENCES Product(ID)
 );
-
 CREATE TABLE Product2_Account (
    Account_Number INT PRIMARY KEY,
    Product_Cost INT,
    Product_ID INT,
-
    FOREIGN KEY (Product_ID) REFERENCES Product(ID)
 );
-
 CREATE TABLE Product3_Account (
    Account_Number INT PRIMARY KEY,
    Product_Cost INT,
    Product_ID INT,
-
    FOREIGN KEY (Product_ID) REFERENCES Product(ID)
 );
 
 CREATE TABLE Repair_Complaint (
    ID INT PRIMARY KEY,
    Technical_Staff_Name varchar(20),
-   Date_Repaired varchar(10),
+   Date_Created varchar(10),
+   Product_ID INT,
+   Complaint_ID INT,
 
    FOREIGN KEY (Technical_Staff_Name) REFERENCES Technical_Staff(Technical_Staff_Name),
+   FOREIGN KEY (Product_ID) REFERENCES Product(ID),
+   FOREIGN KEY (Complaint_ID) REFERENCES Complaint(Complaint_ID)
 );
 
+CREATE TABLE Repair_Request (
+   ID INT PRIMARY KEY,
+   Technical_Staff_Name varchar(20),
+   Quality_Controller_Name varchar(20),
+   Product_ID INT
+);
 ----------------------------------------------------------------------------------------
-
 -- Insert employees
 INSERT INTO Employee(Employee_Name, Address, Salary, Employee_Type)
 VALUES('Hunter', '2325 Louise Ln', 10000, 'Technical Staff')
@@ -285,7 +264,6 @@ VALUES('Kyle', '1410 Wisteria Ave')
 INSERT INTO Purchase(Customer_Name, Product_ID)
 VALUES('Kyle', 1)
 
-
 -- Create product accounts
 INSERT INTO Account(Account_Number, Date_Created)
 VALUES(1, '11/13/2022')
@@ -299,15 +277,15 @@ VALUES(23, '11/12/2022')
 INSERT INTO Product2_Account(Account_Number, Product_Cost, Product_ID)
 VALUES(23, 1000.54, 2)
 
-INSERT INTO Complaint(Complaint_ID, Date_Created, Description, Treatment, Customer_Name, Product_ID)
-VALUES(1, '11/13/2022', 'Screen is faded', 'Screen replacement', 'Rebecca', 1)
+-- Create complaint
+--INSERT INTO Complaint(Complaint_ID, Date_Created, Description, Treatment, Customer_Name, Product_ID)
+--VALUES(1, '11/13/2022', 'Screen is faded', 'Screen replacement', 'Rebecca', 1)
 
+-- Create accident
 INSERT INTO Accident(Accident_Number, Date_Created, Work_Days_Lost, Product_ID, Employee_Name, Employee_Type) 
 VALUES(1, '08/25/2000', 45, 2, 'Hunter', 'Technical Staff')
-
 -------------------------------------------------------------------------------------------------------------
-
-SELECT * FROM Employee
+/*SELECT * FROM Employee
 SELECT * FROM Technical_Staff
 SELECT * FROM Technical_Staff_Degree
 SELECT * FROM Worker
@@ -324,8 +302,3 @@ SELECT * FROM Product2_Account
 SELECT * FROM Product3_Account
 SELECT * FROM Complaint
 SELECT * FROM Accident */
-
--- Query 9
-SELECT * FROM Product
-SELECT COUNT(ID) FROM Product WHERE Tested_By = 'Ronald' AND Repaired_By IS NOT NULL
-
