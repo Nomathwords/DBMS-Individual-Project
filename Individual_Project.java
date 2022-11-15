@@ -30,9 +30,9 @@ public class Individual_Project {
     // User input prompt
     
     final static String PROMPT = "Welcome to Hunter's Warehouse!\n" + "Please select one of the options below:\n" + "1) Insert a new employee \n" + "2) Insert a new product\n" +
-    "3) Insert a customer that has purchased one or more products\n" + "4) Insert a new account associated with a product\n" + 
-    "5) Enter a complaint associated with a customer and product\n" + "6: Log an accident between an employee and product\n"
-    + "7: Retrieve the date produced and time spent to produce a particular product\n"+ "18) Exit!";
+    "3) Insert a customer that has purchased one or more products\n" + "4) Insert a new account associated with a product\n" + "5) Enter a complaint associated with a customer and product\n" + 
+    "6: Log an accident between an employee and product\n" + "7: Retrieve the date produced and time spent to produce a particular product\n" + "8) Retrieve all products made by a particular worker\n" + 
+    "9) Retrieve the total number of errors a particular quality controller made\n" + "18) Exit!";
 
     public static void main(String[] args) throws SQLException {
         final Scanner sc = new Scanner(System.in); // Scanner is used to collect the user input
@@ -476,6 +476,8 @@ public class Individual_Project {
                 	int Complaint_ID;
                 	String Description;
                 	String Treatment;
+                	int Repair_Complaint_ID;
+                	String Employee_Name;
 
                 	
                 	System.out.println("Insert Complaint ID:");
@@ -498,19 +500,45 @@ public class Individual_Project {
                 	Product_ID = sc.nextInt();
                 	sc.nextLine();
                 	
-                	System.out.println("Inserting into Purchase table. . .");
+                	System.out.println("Inserting into Complaint table. . .");
                     try (final Connection connection = DriverManager.getConnection(URL)) {
                         final Statement statement = connection.createStatement();
-                        statement.execute("INSERT INTO Complaint(Complaint_ID, Date, Description, Treatment, Customer_Name, Product_ID) VALUES(" + Complaint_ID + ", '" + Date_Created + "', '" + Description + "', '" + Treatment + "', '" + Customer_Name + "', " + Product_ID + " )");
+                        statement.execute("INSERT INTO Complaint(Complaint_ID, Date_Created, Description, Treatment, Customer_Name, Product_ID) VALUES(" + Complaint_ID + ", '" + Date_Created + "', '" + Description + "', '" + Treatment + "', '" + Customer_Name + "', " + Product_ID + " )");
                         System.out.println("Execution complete!");
                     }
+                    
+                    System.out.println();
+                    
+                	System.out.println("Since we have a complaint, we need to repair it!");
+                	System.out.println();
+                	System.out.println("Insert repair ID:");
+                	Repair_Complaint_ID = sc.nextInt();
+                	sc.nextLine();
                 	
+                	System.out.println("Insert Technician that will repair the complaint:");
+                	Employee_Name = sc.nextLine();
+                	
+                	System.out.println("Insert date that the repair was requested:");
+                	Date_Created = sc.nextLine();
+                	
+                	try(final Connection connection = DriverManager.getConnection(URL)) {
+                		CallableStatement myStmt = connection.prepareCall("{call sp_ComplaintAndRepair(?, ?, ?, ?, ?)}");
+                		
+                		// Insert the Product ID, Date Created, Days Developed, who created it, who tested it, who repaired it (if applicable), the size, and what type of product it is
+                		myStmt.setInt(1, Repair_Complaint_ID);
+                		myStmt.setString(2, Employee_Name);
+                		myStmt.setString(3, Date_Created);
+                		myStmt.setInt(4, Product_ID);
+                		myStmt.setInt(5, Complaint_ID);
+                		myStmt.execute();
+                		System.out.println("Statement executed!");
+                	}
+                    
                 	break;
                 	
                 case "6":
                 	int Accident_Number;
                 	int Work_Days_Lost;
-                	String Employee_Name;
                 	
                 	System.out.println("Insert accident number");
                 	Accident_Number = sc.nextInt();
@@ -592,6 +620,31 @@ public class Individual_Project {
                         }
                     }
                     
+                	break;
+                	
+                case "9":
+                	
+                	System.out.println("Insert quality controller name:");
+                	Employee_Name = sc.nextLine();
+                	
+                	System.out.println("Connecting to the database...");
+                    // Get the database connection, create statement and execute it right away, as no user input need be collected
+                    try (final Connection connection = DriverManager.getConnection(URL)) {
+                        System.out.println("Dispatching the query...\n");
+                        try (
+                            final Statement statement = connection.createStatement();
+                            final ResultSet resultSet = statement.executeQuery("SELECT COUNT(ID) FROM Product WHERE Tested_By = '" + Employee_Name + "' AND Repaired_By IS NOT NULL")) {
+                                System.out.println("Contents of the Product table:");
+                                System.out.println("| Number of Errors |");
+                                // Unpack the tuples returned by the database and print them out to the user
+                                while (resultSet.next()) {
+                                    System.out.println(String.format("| %s |",
+                                    resultSet.getString(1)));
+                                }
+                        }
+                    }
+                    
+                    System.out.println();
                 	break;
                 	
                 case "18": // Do nothing, the while loop will terminate upon the next iteration
