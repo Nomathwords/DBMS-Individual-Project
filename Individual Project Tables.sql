@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS Product1
+/*DROP TABLE IF EXISTS Product1
 DROP TABLE IF EXISTS Product2
 DROP TABLE IF EXISTS Product3
 DROP TABLE IF EXISTS Technical_Staff_Degree
@@ -24,28 +24,33 @@ CREATE TABLE Employee (
    Salary REAL,
    Employee_Type varchar(20)
 );
+
 CREATE TABLE Technical_Staff (
    Technical_Staff_Name varchar(20) PRIMARY KEY,
    Position varchar(20),
    FOREIGN KEY (Technical_Staff_Name) REFERENCES Employee(Employee_Name)
 );
+
 CREATE TABLE Technical_Staff_Degree (
    Name varchar(20),
    Degree varchar(5),
    CONSTRAINT chk_Degree_Type CHECK(Degree = 'BS' OR Degree = 'MS' OR Degree = 'PHD'),
    PRIMARY KEY (Name, Degree),
    FOREIGN KEY (Name) REFERENCES Technical_Staff(Technical_Staff_Name)
-)
+);
+
 CREATE TABLE Worker (
    Worker_Name varchar(20) PRIMARY KEY,
    Max_Products INT,
    FOREIGN KEY (Worker_Name) REFERENCES Employee(Employee_Name)
 );
+
 CREATE TABLE Quality_Controller (
    Quality_Controller_Name varchar(20) PRIMARY KEY,
    Product_Type varchar(20),
    FOREIGN KEY (Quality_Controller_Name) REFERENCES Employee(Employee_Name)
 );
+
 CREATE TABLE Product (
    ID INT PRIMARY KEY,
    Date_Created Date,
@@ -59,6 +64,7 @@ CREATE TABLE Product (
    FOREIGN KEY (Tested_By) REFERENCES Quality_Controller(Quality_Controller_Name),
    FOREIGN KEY (Repaired_By) REFERENCES Technical_Staff(Technical_Staff_Name)
 );
+
 CREATE TABLE Product1 (
    Product1_ID INT PRIMARY KEY,
    Software varchar(30),
@@ -69,15 +75,18 @@ CREATE TABLE Product2 (
    Color varchar(10),
    FOREIGN KEY (Product2_ID) REFERENCES Product(ID)
 );
+
 CREATE TABLE Product3 (
    Product3_ID INT PRIMARY KEY,
    Weight varchar(10),
    FOREIGN KEY (Product3_ID) REFERENCES Product(ID)
 );
+
  CREATE TABLE Customer (
    Name varchar(20) PRIMARY KEY,
    Address varchar(50)
 );
+
 CREATE TABLE Complaint (
    Complaint_ID INT PRIMARY KEY,
    Date_Created DATE,
@@ -88,6 +97,7 @@ CREATE TABLE Complaint (
    FOREIGN KEY (Customer_Name) REFERENCES Customer(Name),
    FOREIGN KEY (Product_ID) REFERENCES Product(ID)
 );
+
 CREATE TABLE Purchase (
    Customer_Name varchar(20),
    Product_ID INT,
@@ -103,14 +113,17 @@ CREATE TABLE Purchase (
    Product_ID INT,
    Employee_Name varchar(20),
    Employee_Type varChar(20),
+
    CONSTRAINT chk_Employee_Type CHECK(Employee_Type != 'Quality Controller'),
    FOREIGN KEY (Product_ID) REFERENCES PRODUCT(ID),
    FOREIGN KEY (Employee_Name) REFERENCES Employee(Employee_Name)
 );
+
 CREATE TABLE Account (
    Account_Number INT PRIMARY KEY,
    Date_Created DATE
 );
+
 CREATE TABLE Product1_Account (
    Account_Number INT PRIMARY KEY,
    Product_Cost REAL,
@@ -118,12 +131,14 @@ CREATE TABLE Product1_Account (
    FOREIGN KEY (Account_Number) REFERENCES Account(Account_Number),
    FOREIGN KEY (Product_ID) REFERENCES Product(ID)
 );
+
 CREATE TABLE Product2_Account (
    Account_Number INT PRIMARY KEY,
    Product_Cost INT,
    Product_ID INT,
    FOREIGN KEY (Product_ID) REFERENCES Product(ID)
 );
+
 CREATE TABLE Product3_Account (
    Account_Number INT PRIMARY KEY,
    Product_Cost INT,
@@ -210,13 +225,13 @@ INSERT INTO Product1(Product1_ID, Software)
 VALUES(4, 'C++')
 
 INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(5, '07/04/2016', 12, 'Dieko', 'Ansley', 'Steven', 'Medium', 1)
+VALUES(5, '07/04/2016', 12, 'Dieko', 'Ansley', null, 'Medium', 1)
 
 INSERT INTO Product1(Product1_ID, Software)
 VALUES(5, 'Ruby')
 
 INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(2, '11/10/2022', 45, 'Jackson', 'Ansley', 'Hunter', 'Small', 2)
+VALUES(2, '11/10/2022', 45, 'Jackson', 'Ansley', null, 'Small', 2)
 
 INSERT INTO Product2(Product2_ID, Color)
 VALUES(2, 'Green')
@@ -228,13 +243,13 @@ INSERT INTO Product2(Product2_ID, Color)
 VALUES(6, 'Black')
 
 INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(7, '02/24/2002', 61, 'Jackson', 'Ronald', 'Steven', 'Small', 2)
+VALUES(7, '02/24/2002', 61, 'Jackson', 'Ronald', null, 'Small', 2)
 
 INSERT INTO Product2(Product2_ID, Color)
 VALUES(7, 'Red')
 
 INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(3, '11/10/2022', 45, 'Jackson', 'Ansley', 'Hunter', 'Medium', 3)
+VALUES(3, '11/10/2022', 45, 'Jackson', 'Ansley', null, 'Medium', 3)
 
 INSERT INTO Product3(Product3_ID, Weight)
 VALUES(3, 100.75)
@@ -282,8 +297,8 @@ VALUES(23, 1000.54, 2)
 --VALUES(1, '11/13/2022', 'Screen is faded', 'Screen replacement', 'Rebecca', 1)
 
 -- Create accident
-INSERT INTO Accident(Accident_Number, Date_Created, Work_Days_Lost, Product_ID, Employee_Name, Employee_Type) 
-VALUES(1, '08/25/2000', 45, 2, 'Hunter', 'Technical Staff')
+--INSERT INTO Accident(Accident_Number, Date_Created, Work_Days_Lost, Product_ID, Employee_Name, Employee_Type) 
+--VALUES(1, '08/25/2000', 45, 2, 'Hunter', 'Technical Staff') */
 -------------------------------------------------------------------------------------------------------------
 /*SELECT * FROM Employee
 SELECT * FROM Technical_Staff
@@ -301,4 +316,12 @@ SELECT * FROM Product1_Account
 SELECT * FROM Product2_Account
 SELECT * FROM Product3_Account
 SELECT * FROM Complaint
-SELECT * FROM Accident */
+SELECT * FROM Accident
+
+SELECT * FROM Product
+SELECT * FROM Purchase
+SELECT * FROM Complaint*/
+
+SELECT * FROM Purchase
+SELECT * FROM Product
+SELECT * FROM Product2
