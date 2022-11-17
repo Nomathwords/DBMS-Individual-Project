@@ -1,6 +1,3 @@
-/*DROP TABLE IF EXISTS Product1
-DROP TABLE IF EXISTS Product2
-DROP TABLE IF EXISTS Product3
 DROP TABLE IF EXISTS Technical_Staff_Degree
 DROP TABLE IF EXISTS Repair_Complaint
 DROP TABLE IF EXISTS Complaint
@@ -9,14 +6,17 @@ DROP TABLE IF EXISTS Product1_Account
 DROP TABLE IF EXISTS Product2_Account
 DROP TABLE IF EXISTS Product3_Account
 DROP TABLE IF EXISTS Purchase
+DROP TABLE IF EXISTS Customer
+DROP TABLE IF EXISTS Account
+DROP TABLE IF EXISTS Repair_Request
+DROP TABLE IF EXISTS Product1
+DROP TABLE IF EXISTS Product2
+DROP TABLE IF EXISTS Product3
 DROP TABLE IF EXISTS Product
 DROP TABLE IF EXISTS Technical_Staff
 DROP TABLE IF EXISTS Worker
 DROP TABLE IF EXISTS Quality_Controller
 DROP TABLE IF EXISTS Employee
-DROP TABLE IF EXISTS Customer
-DROP TABLE IF EXISTS Account
-DROP TABLE IF EXISTS Repair_Request
 
 CREATE TABLE Employee (
    Employee_Name varchar(20) PRIMARY KEY,
@@ -70,6 +70,7 @@ CREATE TABLE Product1 (
    Software varchar(30),
    FOREIGN KEY (Product1_ID) REFERENCES Product(ID)
 );
+
 CREATE TABLE Product2 (
    Product2_ID INT PRIMARY KEY,
    Color varchar(10),
@@ -113,7 +114,6 @@ CREATE TABLE Purchase (
    Product_ID INT,
    Employee_Name varchar(20),
    Employee_Type varChar(20),
-
    CONSTRAINT chk_Employee_Type CHECK(Employee_Type != 'Quality Controller'),
    FOREIGN KEY (Product_ID) REFERENCES PRODUCT(ID),
    FOREIGN KEY (Employee_Name) REFERENCES Employee(Employee_Name)
@@ -121,28 +121,36 @@ CREATE TABLE Purchase (
 
 CREATE TABLE Account (
    Account_Number INT PRIMARY KEY,
-   Date_Created DATE
+   Date_Created DATE,
+   Product_ID INT UNIQUE,
+
+   FOREIGN KEY (Product_ID) REFERENCES Product(ID)
 );
 
 CREATE TABLE Product1_Account (
    Account_Number INT PRIMARY KEY,
    Product_Cost REAL,
-   Product_ID INT,
+   Product_ID INT UNIQUE,
+
    FOREIGN KEY (Account_Number) REFERENCES Account(Account_Number),
    FOREIGN KEY (Product_ID) REFERENCES Product(ID)
 );
 
 CREATE TABLE Product2_Account (
    Account_Number INT PRIMARY KEY,
-   Product_Cost INT,
-   Product_ID INT,
+   Product_Cost REAL,
+   Product_ID INT UNIQUE,
+
+   FOREIGN KEY (Account_Number) REFERENCES Account(Account_Number),
    FOREIGN KEY (Product_ID) REFERENCES Product(ID)
 );
 
 CREATE TABLE Product3_Account (
    Account_Number INT PRIMARY KEY,
-   Product_Cost INT,
-   Product_ID INT,
+   Product_Cost REAL,
+   Product_ID INT UNIQUE,
+
+   FOREIGN KEY (Account_Number) REFERENCES Account(Account_Number),
    FOREIGN KEY (Product_ID) REFERENCES Product(ID)
 );
 
@@ -225,13 +233,13 @@ INSERT INTO Product1(Product1_ID, Software)
 VALUES(4, 'C++')
 
 INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(5, '07/04/2016', 12, 'Dieko', 'Ansley', null, 'Medium', 1)
+VALUES(5, '07/04/2016', 12, 'Dieko', 'Ansley', 'Steven', 'Medium', 1)
 
 INSERT INTO Product1(Product1_ID, Software)
 VALUES(5, 'Ruby')
 
 INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(2, '11/10/2022', 45, 'Jackson', 'Ansley', null, 'Small', 2)
+VALUES(2, '11/10/2022', 45, 'Jackson', 'Ansley', 'Hunter', 'Small', 2)
 
 INSERT INTO Product2(Product2_ID, Color)
 VALUES(2, 'Green')
@@ -243,13 +251,13 @@ INSERT INTO Product2(Product2_ID, Color)
 VALUES(6, 'Black')
 
 INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(7, '02/24/2002', 61, 'Jackson', 'Ronald', null, 'Small', 2)
+VALUES(7, '02/24/2002', 61, 'Jackson', 'Ronald', 'Steven', 'Small', 2)
 
 INSERT INTO Product2(Product2_ID, Color)
 VALUES(7, 'Red')
 
 INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(3, '11/10/2022', 45, 'Jackson', 'Ansley', null, 'Medium', 3)
+VALUES(3, '11/10/2022', 45, 'Jackson', 'Ansley', 'Hunter', 'Medium', 3)
 
 INSERT INTO Product3(Product3_ID, Weight)
 VALUES(3, 100.75)
@@ -280,48 +288,77 @@ INSERT INTO Purchase(Customer_Name, Product_ID)
 VALUES('Kyle', 1)
 
 -- Create product accounts
-INSERT INTO Account(Account_Number, Date_Created)
-VALUES(1, '11/13/2022')
+INSERT INTO Account(Account_Number, Date_Created, Product_ID)
+VALUES(1, '11/13/2022', 1)
 
 INSERT INTO Product1_Account(Account_Number, Product_Cost, Product_ID)
-VALUES(1, 100.75, 1)
+VALUES(1, 100.751, 1)
 
-INSERT INTO Account(Account_Number, Date_Created)
-VALUES(23, '11/12/2022')
+INSERT INTO Account(Account_Number, Date_Created, Product_ID)
+VALUES(45, '11/12/2022', 6)
 
 INSERT INTO Product2_Account(Account_Number, Product_Cost, Product_ID)
-VALUES(23, 1000.54, 2)
+VALUES(45, 67.69, 6)
+
+INSERT INTO Account(Account_Number, Date_Created, Product_ID)
+VALUES(23, '11/12/2022', 4)
+
+INSERT INTO Product1_Account(Account_Number, Product_Cost, Product_ID)
+VALUES(23, 1000.54, 4)
+
+INSERT INTO Account(Account_Number, Date_Created, Product_ID)
+VALUES(69, '11/12/2022', 2)
+
+INSERT INTO Product2_Account(Account_Number, Product_Cost, Product_ID)
+VALUES(69, 69.54, 2)
+
+INSERT INTO Account(Account_Number, Date_Created, Product_ID)
+VALUES(2, '11/13/2022', 3)
+
+INSERT INTO Product3_Account(Account_Number, Product_Cost, Product_ID)
+VALUES(2, 100, 3)
+
+INSERT INTO Account(Account_Number, Date_Created, Product_ID)
+VALUES(3, '11/13/2022', 8)
+
+INSERT INTO Product3_Account(Account_Number, Product_Cost, Product_ID)
+VALUES(3, 1214.36, 8)
+
+INSERT INTO Account(Account_Number, Date_Created, Product_ID)
+VALUES(4, '11/13/2022', 9)
+
+INSERT INTO Product3_Account(Account_Number, Product_Cost, Product_ID)
+VALUES(4, 35.28, 9)
 
 -- Create complaint
 --INSERT INTO Complaint(Complaint_ID, Date_Created, Description, Treatment, Customer_Name, Product_ID)
 --VALUES(1, '11/13/2022', 'Screen is faded', 'Screen replacement', 'Rebecca', 1)
 
 -- Create accident
---INSERT INTO Accident(Accident_Number, Date_Created, Work_Days_Lost, Product_ID, Employee_Name, Employee_Type) 
---VALUES(1, '08/25/2000', 45, 2, 'Hunter', 'Technical Staff') */
+INSERT INTO Accident(Accident_Number, Date_Created, Work_Days_Lost, Product_ID, Employee_Name, Employee_Type) 
+VALUES(1, '08/25/2000', 45, 2, 'Hunter', 'Technical Staff')
+
+-- Create repair request
+INSERT INTO Repair_Request(ID, Technical_Staff_Name, Quality_Controller_Name, Product_ID)
+VALUES(1, 'Hunter', 'Ansley', 3)
+
+INSERT INTO Repair_Request(ID, Technical_Staff_Name, Quality_Controller_Name, Product_ID)
+VALUES(2, 'Hunter', 'Ronald', 8)
+
+INSERT INTO Repair_Request(ID, Technical_Staff_Name, Quality_Controller_Name, Product_ID)
+VALUES(3, 'Hunter', 'Ansley', 9)
+
 -------------------------------------------------------------------------------------------------------------
-/*SELECT * FROM Employee
-SELECT * FROM Technical_Staff
-SELECT * FROM Technical_Staff_Degree
-SELECT * FROM Worker
-SELECT * FROM Quality_Controller
-SELECT * FROM Product
-SELECT * FROM Product1
-SELECT * FROM Product2
-SELECT * FROM Product3
-SELECT * FROM Customer
-SELECT * FROM Purchase 
-SELECT * FROM Account
-SELECT * FROM Product1_Account
-SELECT * FROM Product2_Account
-SELECT * FROM Product3_Account
-SELECT * FROM Complaint
-SELECT * FROM Accident
 
-SELECT * FROM Product
-SELECT * FROM Purchase
-SELECT * FROM Complaint*/
+-- Query 10
+SELECT ROUND(SUM(Product_Cost),2) FROM Product3_Account JOIN Repair_Request 
+ON Product3_Account.Product_ID = Repair_Request.Product_ID
+Where Repair_Request.Quality_Controller_Name = 'Ansley'
 
-SELECT * FROM Purchase
-SELECT * FROM Product
-SELECT * FROM Product2
+-- Query 12
+SELECT Employee_Name FROM Employee WHERE Salary > 10000
+
+-- Query 13
+SELECT SUM(Work_Days_Lost) FROM Accident Where Employee_Type = 'Technical Staff'
+
+-- Query 14
