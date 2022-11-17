@@ -653,6 +653,29 @@ public class Individual_Project {
                     System.out.println();
                 	break;
                 	
+                case "10":
+                	System.out.println("Insert Quality Controller:");
+                	Employee_Name = sc.nextLine();
+                	
+                	try (final Connection connection = DriverManager.getConnection(URL)) {
+                        System.out.println("Dispatching the query...\n");
+                        try (
+                            final Statement statement = connection.createStatement();
+                            final ResultSet resultSet = statement.executeQuery("SELECT ROUND(SUM(Product_Cost),2) FROM Product3_Account JOIN Repair_Request ON Product3_Account.Product_ID = Repair_Request.Product_ID Where Repair_Request.Quality_Controller_Name = '" + Employee_Name + "'")) {
+                                System.out.println("Contents of the table:");
+                                System.out.println("| Total costs |");
+                                // Unpack the tuples returned by the database and print them out to the user
+                                while (resultSet.next()) {
+                                    System.out.println(String.format("| %s |",
+                                    resultSet.getString(1)));
+                                }
+                        }
+                    }
+                	
+                	
+                	
+                	break;
+                	
                     
                 case "11":
                 	String Color;
@@ -678,6 +701,55 @@ public class Individual_Project {
                     }
                     
                     System.out.println();
+                	
+                	break;
+                	
+                case "12":
+                	double Salary;
+                	
+                	System.out.println("Enter salary:");
+                	Salary = sc.nextDouble();
+                	sc.nextLine();
+                	
+                	System.out.println("Connecting to the database...");
+                    // Get the database connection, create statement and execute it right away, as no user input need be collected
+                    try (final Connection connection = DriverManager.getConnection(URL)) {
+                        System.out.println("Dispatching the query...\n");
+                        try (
+                            final Statement statement = connection.createStatement();
+                            final ResultSet resultSet = statement.executeQuery("SELECT Employee_Name FROM Employee WHERE Salary > '" + Salary + "'")) {
+                                System.out.println("Contents of the Employee table:");
+                                System.out.println("| Employees |");
+                                // Unpack the tuples returned by the database and print them out to the user
+                                while (resultSet.next()) {
+                                    System.out.println(String.format("| %s |",
+                                    resultSet.getString(1)));
+                                }
+                        }
+                    }
+                    
+                    break;
+                	
+                case "13":
+                	System.out.println("Enter Technical Staff name:");
+                	Employee_Name = sc.nextLine();
+                	
+                	System.out.println("Connecting to the database...");
+                    // Get the database connection, create statement and execute it right away, as no user input need be collected
+                    try (final Connection connection = DriverManager.getConnection(URL)) {
+                        System.out.println("Dispatching the query...\n");
+                        try (
+                            final Statement statement = connection.createStatement();
+                            final ResultSet resultSet = statement.executeQuery("SELECT SUM(Work_Days_Lost) FROM Accident Where Employee_Type = '" + Employee_Name + "'")) {
+                                System.out.println("Contents of the Employee table:");
+                                System.out.println("| Employees |");
+                                // Unpack the tuples returned by the database and print them out to the user
+                                while (resultSet.next()) {
+                                    System.out.println(String.format("| %s |",
+                                    resultSet.getString(1)));
+                                }
+                        }
+                    }
                 	
                 	break;
                 	
