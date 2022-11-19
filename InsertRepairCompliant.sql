@@ -14,7 +14,7 @@ AS
 
 BEGIN
 
-INSERT INTO Complaint(ID, Technical_Staff_Name, Date_Created, Product_ID, Complaint_ID)
+INSERT INTO Repair_Complaint(ID, Technical_Staff_Name, Date_Created, Product_ID, Complaint_ID)
 VALUES(@ID, @Technical_Staff_Name, @Date_Created, @Product_ID, @Complaint_ID)
 
 UPDATE Product
