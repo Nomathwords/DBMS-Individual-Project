@@ -60,10 +60,15 @@ CREATE TABLE Product (
    Repaired_By varchar(20),
    Size varchar(20),
    Product_Type INT,
+
+   CONSTRAINT chk_Product_Size CHECK(Size = 'Small' OR Size = 'Medium' OR Size = 'Large'),
    FOREIGN KEY (Produced_By) REFERENCES Worker(Worker_Name),
    FOREIGN KEY (Tested_By) REFERENCES Quality_Controller(Quality_Controller_Name),
    FOREIGN KEY (Repaired_By) REFERENCES Technical_Staff(Technical_Staff_Name)
 );
+
+-- Product secondary index on worker name
+CREATE INDEX Product_Worker ON Product(Produced_By)
 
 CREATE TABLE Product1 (
    Product1_ID INT PRIMARY KEY,
@@ -76,6 +81,9 @@ CREATE TABLE Product2 (
    Color varchar(10),
    FOREIGN KEY (Product2_ID) REFERENCES Product(ID)
 );
+
+-- Index on Color for Product2
+CREATE INDEX Product2_Color ON Product2(Color)
 
 CREATE TABLE Product3 (
    Product3_ID INT PRIMARY KEY,
@@ -108,9 +116,9 @@ CREATE TABLE Purchase (
 );
 
  CREATE TABLE Accident (
-   Accident_Number INT,
+   Accident_Number INT PRIMARY KEY,
    Date_Created DATE,
-   Work_Days_Lost varchar(3),
+   Work_Days_Lost INT,
    Product_ID INT,
    Employee_Name varchar(20),
    Employee_Type varChar(20),
@@ -118,6 +126,9 @@ CREATE TABLE Purchase (
    FOREIGN KEY (Product_ID) REFERENCES PRODUCT(ID),
    FOREIGN KEY (Employee_Name) REFERENCES Employee(Employee_Name)
 );
+
+-- Index on Date for Accident
+CREATE INDEX Accident_Date ON Accident(Date_Created)
 
 CREATE TABLE Account (
    Account_Number INT PRIMARY KEY,
@@ -172,193 +183,7 @@ CREATE TABLE Repair_Request (
    Quality_Controller_Name varchar(20),
    Product_ID INT
 );
+
+-- Index on Quality Controller for Repair_Request
+CREATE INDEX Repair_Request_Quality_Controller ON Repair_Request(Quality_Controller_Name asc)
 ----------------------------------------------------------------------------------------
--- Insert employees
-INSERT INTO Employee(Employee_Name, Address, Salary, Employee_Type)
-VALUES('Hunter', '2325 Louise Ln', 10000, 'Technical Staff')
-
-INSERT INTO Technical_Staff(Technical_Staff_Name, Position)
-VALUES('Hunter', 'IT')
-
-INSERT INTO Technical_Staff_Degree(Name, Degree)
-VALUES ('Hunter', 'BS')
-
-INSERT INTO Employee(Employee_Name, Address, Salary, Employee_Type)
-VALUES('Steven', '1321 E 24th St', 50000, 'Technical Staff')
-
-INSERT INTO Technical_Staff(Technical_Staff_Name, Position)
-VALUES('Steven', 'Manager')
-
-INSERT INTO Technical_Staff_Degree(Name, Degree)
-VALUES ('Steven', 'BS')
-
-INSERT INTO Technical_Staff_Degree(Name, Degree)
-VALUES ('Steven', 'MS')
-
-INSERT INTO Employee(Employee_Name, Address, Salary, Employee_Type)
-VALUES('Jackson', '1410 Wisteria Ave', 32000, 'Worker')
-
-INSERT INTO Worker(Worker_Name, Max_Products)
-VALUES('Jackson', 23)
-
-INSERT INTO Employee(Employee_Name, Address, Salary, Employee_Type)
-VALUES('Dieko', '1309 Traditions Way', 28000, 'Worker')
-
-INSERT INTO Worker(Worker_Name, Max_Products)
-VALUES('Dieko', 20)
-
-INSERT INTO Employee(Employee_Name, Address, Salary, Employee_Type)
-VALUES('Ansley', '1410 Wisteria Ave', 10000, 'Quality Controller')
-
-INSERT INTO Quality_Controller(Quality_Controller_Name, Product_Type)
-VALUES('Ansley', 'Toys')
-
-INSERT INTO Employee(Employee_Name, Address, Salary, Employee_Type)
-VALUES('Ronald', '1100 S Ocean Blvd, Palm Beach', 100000, 'Quality Controller')
-
-INSERT INTO Quality_Controller(Quality_Controller_Name, Product_Type)
-VALUES('Ronald', 'Flags')
-
--- Insert Products
-INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(1, '11/13/2022', 3, 'Jackson', 'Ansley', null, 'Large', 1)
-
-INSERT INTO Product1(Product1_ID, Software)
-VALUES(1, 'Java')
-
-INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(4, '10/25/2019', 65, 'Dieko', 'Ronald', null, 'Extra Small', 1)
-
-INSERT INTO Product1(Product1_ID, Software)
-VALUES(4, 'C++')
-
-INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(5, '07/04/2016', 12, 'Dieko', 'Ansley', 'Steven', 'Medium', 1)
-
-INSERT INTO Product1(Product1_ID, Software)
-VALUES(5, 'Ruby')
-
-INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(2, '11/10/2022', 45, 'Jackson', 'Ansley', 'Hunter', 'Small', 2)
-
-INSERT INTO Product2(Product2_ID, Color)
-VALUES(2, 'Green')
-
-INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(6, '12/31/1999', 365, 'Dieko', 'Ronald', null, 'Extra Large', 2)
-
-INSERT INTO Product2(Product2_ID, Color)
-VALUES(6, 'Black')
-
-INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(7, '02/24/2002', 61, 'Jackson', 'Ronald', 'Steven', 'Small', 2)
-
-INSERT INTO Product2(Product2_ID, Color)
-VALUES(7, 'Red')
-
-INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(3, '11/10/2022', 45, 'Jackson', 'Ansley', 'Hunter', 'Medium', 3)
-
-INSERT INTO Product3(Product3_ID, Weight)
-VALUES(3, 100.75)
-
-INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(8, '08/02/2005', 02, 'Dieko', 'Ansley', null, 'Small', 3)
-
-INSERT INTO Product3(Product3_ID, Weight)
-VALUES(8, 5.25)
-
-INSERT INTO Product(ID, Date_Created, Days_Developed, Produced_By, Tested_By, Repaired_By, Size, Product_Type)
-VALUES(9, '10/23/2007', 10, 'Dieko', 'Ronald', null, 'Large', 3)
-
-INSERT INTO Product3(Product3_ID, Weight)
-VALUES(9, 107)
-
--- Insert customers associated with products
-INSERT INTO Customer(Name, Address)
-VALUES('Rebecca', 'Bumfuckville')
-
-INSERT INTO Purchase(Customer_Name, Product_ID)
-VALUES('Rebecca', 1)
-
-INSERT INTO Customer(Name, Address)
-VALUES('Kyle', '1410 Wisteria Ave')
-
-INSERT INTO Purchase(Customer_Name, Product_ID)
-VALUES('Kyle', 1)
-
--- Create product accounts
-INSERT INTO Account(Account_Number, Date_Created, Product_ID)
-VALUES(1, '11/13/2022', 1)
-
-INSERT INTO Product1_Account(Account_Number, Product_Cost, Product_ID)
-VALUES(1, 100.751, 1)
-
-INSERT INTO Account(Account_Number, Date_Created, Product_ID)
-VALUES(45, '11/12/2022', 6)
-
-INSERT INTO Product2_Account(Account_Number, Product_Cost, Product_ID)
-VALUES(45, 67.69, 6)
-
-INSERT INTO Account(Account_Number, Date_Created, Product_ID)
-VALUES(23, '11/12/2022', 4)
-
-INSERT INTO Product1_Account(Account_Number, Product_Cost, Product_ID)
-VALUES(23, 1000.54, 4)
-
-INSERT INTO Account(Account_Number, Date_Created, Product_ID)
-VALUES(69, '11/12/2022', 2)
-
-INSERT INTO Product2_Account(Account_Number, Product_Cost, Product_ID)
-VALUES(69, 69.54, 2)
-
-INSERT INTO Account(Account_Number, Date_Created, Product_ID)
-VALUES(2, '11/13/2022', 3)
-
-INSERT INTO Product3_Account(Account_Number, Product_Cost, Product_ID)
-VALUES(2, 100, 3)
-
-INSERT INTO Account(Account_Number, Date_Created, Product_ID)
-VALUES(3, '11/13/2022', 8)
-
-INSERT INTO Product3_Account(Account_Number, Product_Cost, Product_ID)
-VALUES(3, 1214.36, 8)
-
-INSERT INTO Account(Account_Number, Date_Created, Product_ID)
-VALUES(4, '11/13/2022', 9)
-
-INSERT INTO Product3_Account(Account_Number, Product_Cost, Product_ID)
-VALUES(4, 35.28, 9)
-
--- Create complaint
---INSERT INTO Complaint(Complaint_ID, Date_Created, Description, Treatment, Customer_Name, Product_ID)
---VALUES(1, '11/13/2022', 'Screen is faded', 'Screen replacement', 'Rebecca', 1)
-
--- Create accident
-INSERT INTO Accident(Accident_Number, Date_Created, Work_Days_Lost, Product_ID, Employee_Name, Employee_Type) 
-VALUES(1, '08/25/2000', 45, 2, 'Hunter', 'Technical Staff')
-
--- Create repair request
-INSERT INTO Repair_Request(ID, Technical_Staff_Name, Quality_Controller_Name, Product_ID)
-VALUES(1, 'Hunter', 'Ansley', 3)
-
-INSERT INTO Repair_Request(ID, Technical_Staff_Name, Quality_Controller_Name, Product_ID)
-VALUES(2, 'Hunter', 'Ronald', 8)
-
-INSERT INTO Repair_Request(ID, Technical_Staff_Name, Quality_Controller_Name, Product_ID)
-VALUES(3, 'Hunter', 'Ansley', 9)
-
--------------------------------------------------------------------------------------------------------------
-
--- Query 10
-SELECT ROUND(SUM(Product_Cost),2) FROM Product3_Account JOIN Repair_Request 
-ON Product3_Account.Product_ID = Repair_Request.Product_ID
-Where Repair_Request.Quality_Controller_Name = 'Ansley'
-
--- Query 12
-SELECT Employee_Name FROM Employee WHERE Salary > 10000
-
--- Query 13
-SELECT SUM(Work_Days_Lost) FROM Accident Where Employee_Type = 'Technical Staff'
-
--- Query 14
