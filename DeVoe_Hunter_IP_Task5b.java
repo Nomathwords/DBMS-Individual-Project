@@ -484,7 +484,7 @@ public class Individual_Project {
                 	break;
                 	
                 // Insert a new account associated with a product
-                case"4":
+		case "4":
                 	int Account_Number;
                 	double Product_Cost;
 
@@ -519,7 +519,7 @@ public class Individual_Project {
                 	break;
                 
                 // Insert a complaint associated with a customer and a product
-                case"5":
+		case "5":
                 	int Complaint_ID;
                 	String Description;
                 	String Treatment;

@@ -7,10 +7,10 @@ import java.sql.PreparedStatement;
 public class DataHandler {
     private Connection conn;
     // Azure SQL connection credentials
-    private String server = "";
-    private String database = "";
-    private String username = "";
-    private String password = "";
+    private String server = "devo0008-sql-server.database.windows.net";
+    private String database = "cs-dsa-4513-sql-db";
+    private String username = "devo0008";
+    private String password = "nOmathwords1!";
     // Resulting connection string
     final private String url =
             String.format("jdbc:sqlserver://%s:1433;database=%s;user=%s;password=%s;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;", server, database, username, password);
